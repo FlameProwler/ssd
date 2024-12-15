@@ -1,0 +1,24 @@
+const { ethers } = require("hardhat");
+
+async function main() {
+    // Get signers from the wallet
+    const [deployer] = await ethers.getSigners();
+    console.log("Deploying contracts with the account:", deployer.address);
+
+    // Deploy the Factory contract
+    const Factory = await ethers.getContractFactory("MyContractFactory");
+    const factory = await Factory.deploy();
+    console.log("Factory Contract deployed to:", factory.address);
+
+    // Optional: Deploy a contract via the factory
+    const tx = await factory.createContract(42);  // Example: Passing value 42 to create the contract
+    await tx.wait();  // Wait for the transaction to be mined
+    console.log("Contract created with value 42!");
+}
+
+main()
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });
